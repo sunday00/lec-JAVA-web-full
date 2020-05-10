@@ -30,7 +30,9 @@
         </div>
     </section>
     <footer>
-
+        <%-- this will not be compiled --%>
+        <% //this will not act %>
+        <!-- this will not be shown -->
     </footer>
 </body>
 </html>
