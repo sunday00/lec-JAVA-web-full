@@ -1,4 +1,4 @@
-package lec.java.api;
+package lec.javaexam.dto;
 
 public class RoleDto {
     private int roleId;

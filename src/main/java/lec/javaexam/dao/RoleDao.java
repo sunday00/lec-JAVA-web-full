@@ -1,4 +1,6 @@
-package lec.java.api;
+package lec.javaexam.dao;
+
+import lec.javaexam.dto.RoleDto;
 
 import java.sql.*;
 import java.util.ArrayList;
