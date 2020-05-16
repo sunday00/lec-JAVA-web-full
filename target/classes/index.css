@@ -1,0 +1,67 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+
+header i.Design {
+    display: inline-block;
+    width: 450px;
+    height: 20px;
+    background-color: cornflowerblue;
+    transform: rotate(-45deg);
+    margin-left: -200px;
+    position: relative;
+    z-index: -10;
+}
+
+h1{
+    font-size: 2rem;
+    font-weight: bold;
+    color: #232142;
+}
+
+header {
+    overflow: auto;
+}
+
+header div{
+    float: left;
+    width: 50%;
+}
+
+header div:last-child{
+    text-align: right;
+}
+
+header button {
+    background-color: deepskyblue;
+    color: #ddd;
+    font-size: 1.3rem;
+    padding: 10px;
+    margin-top: 20px;
+    margin-right: 20px;
+    width: 220px;
+}
+
+.container {
+    overflow: auto;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.container section{
+    width: 30%;
+    float: left;
+    margin-right: 5%;
+}
+
+.container section:last-child{
+    margin-right: 0;
+}
+
+.container section h2 {
+    background-color: #232142;
+    color: #efefef;
+    text-align: center;
+    padding: 10px;
+}
