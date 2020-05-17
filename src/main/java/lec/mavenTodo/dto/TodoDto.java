@@ -1,11 +1,14 @@
 package lec.mavenTodo.dto;
 
+import java.time.LocalDateTime;
+
 public class TodoDto {
     int id;
     String title;
     String name;
     int sequence;
     String type;
+    LocalDateTime regDate;
 
     public TodoDto() {
     }
@@ -48,5 +51,13 @@ public class TodoDto {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public LocalDateTime getRegDate() {
+        return regDate;
+    }
+
+    public void setRegDate(LocalDateTime regDate) {
+        this.regDate = regDate;
     }
 }

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TodosDao {
-    private static final String dbUrl = "jdbc:mysql://127.0.0.1:3306/practice?characterEncoding=UTF-8&serverTimezone=UTC";
+    private static final String dbUrl = "jdbc:mysql://127.0.0.1:3306/practice?characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
     private static final String dbUser = "Tester";
     private static final String dbPw = "Zktm500CC!";
 
@@ -32,12 +32,14 @@ public class TodosDao {
             String name = rs.getString("name");
             int sequence = rs.getInt("sequence");
             String type = rs.getString("type");
+            Timestamp regDate = rs.getTimestamp("regDate");
             todos = new TodoDto();
             todos.setId(id);
             todos.setTitle(title);
             todos.setName(name);
             todos.setSequence(sequence);
             todos.setType(type);
+            todos.setRegDate(regDate.toLocalDateTime());
             result.add(todos);
         }
 

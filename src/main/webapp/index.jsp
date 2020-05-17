@@ -23,13 +23,49 @@
     <div class="container">
         <section class="todo">
             <h2>TODO</h2>
+            <ul></ul>
         </section>
         <section class="doing">
             <h2>Doing</h2>
+            <ul></ul>
         </section>
         <section class="done">
             <h2>Done</h2>
+            <ul></ul>
         </section>
+    </div>
+    <div id="input-modal">
+        <div class="wrap">
+            <h2>New TODO</h2>
+            <form action="/api/v1/todos" method="POST">
+                <div class="title">
+                    <label for="title" class="modal-title">Title</label>
+                    <input type="text" id="title" name="title" />
+                </div>
+                <div class="name">
+                    <label for="name" class="modal-title">Name</label>
+                    <input type="text" id="name" name="name" />
+                </div>
+                <div class="sequence">
+                    <p class="modal-title">Ssequence</p>
+                    <label for="sequence1">sequence1</label>
+                    <input type="radio" id="sequence1" name="sequence" value="sequence1" />
+                    <label for="sequence2">sequence2</label>
+                    <input type="radio" id="sequence2" name="sequence" value="sequence2" />
+                    <label for="sequence3">sequence3</label>
+                    <input type="radio" id="sequence3" name="sequence" value="sequence3" />
+                </div>
+                <div class="btns">
+                    <div class="text-left">
+                        <button id="cancel">cancel</button>
+                    </div>
+                    <div class="text-right">
+                        <button id="reset">reset</button>
+                        <button type="submit">submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
     <script src="/resources/index.js"></script>
 </body>
