@@ -17,18 +17,38 @@ import java.util.List;
 @WebServlet("/api/v1/todos")
 public class TodosServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("application/json;charset=UTF-8;");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         TodosDao dao = new TodosDao();
         List<TodoDto> todos = null;
         try {
             todos = dao.getAllTodos();
-        } catch (SQLException throwables) {
+        } catch (SQLException | ClassNotFoundException throwables ) {
             throwables.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(todos);
+
+        PrintWriter pw = response.getWriter();
+        pw.println(json);
+        pw.close();
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        TodosDao dao = new TodosDao();
+        TodoDto todo = null;
+
+        try {
+            todo = dao.insertTodo(request);
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(todo);
 
         PrintWriter pw = response.getWriter();
         pw.println(json);

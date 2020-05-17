@@ -46,18 +46,21 @@ header div:last-child{
     text-align: right;
 }
 
-header button {
+button {
     background-color: deepskyblue;
-    color: #ddd;
+    color: #efefef;
     font-size: 1.3rem;
     padding: 10px;
-    margin-top: 20px;
-    margin-right: 20px;
-    width: 220px;
     outline: none;
     border: none;
     box-shadow: 2px 2px 4px gray;
     cursor: pointer;
+}
+
+header button {
+    width: 220px;
+    margin-top: 20px;
+    margin-right: 20px;
 }
 
 .container {
@@ -103,6 +106,8 @@ header button {
 .container section ul li > div button {
     position: absolute;
     right: 10px;
+    padding: 3px;
+    width: 40px;
 }
 
 #input-modal {
@@ -189,17 +194,9 @@ header button {
 }
 
 #input-modal .btns button {
-    background-color: deepskyblue;
-    color: #ddd;
-    font-size: 1.3rem;
-    padding: 10px;
     margin-top: 5px;
     margin-right: 5px;
     width: 110px;
-    outline: none;
-    border: none;
-    box-shadow: 2px 2px 4px gray;
-    cursor: pointer;
 }
 
 

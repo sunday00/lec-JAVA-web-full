@@ -2,7 +2,9 @@ package lec.mavenTodo.dao;
 
 import lec.mavenTodo.dto.TodoDto;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,4 +54,36 @@ public class TodosDao {
         return result;
     }
 
+    public TodoDto insertTodo(HttpServletRequest request) throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+
+        String sql = "INSERT INTO todo (title, name, sequence, type) VALUES (?, ?, ?, 'todo')";
+
+        conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
+        ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        ps.setString(1, request.getParameter("title"));
+        ps.setString(2, request.getParameter("name"));
+        ps.setInt(3, Integer.parseInt( request.getParameter("sequence") ));
+
+        TodoDto todo = null;
+        int id = 0;
+
+        ps.executeUpdate();
+        rs = ps.getGeneratedKeys();
+        while (rs.next()){
+            id = rs.getInt(1);
+        }
+
+        if( id != 0 ){
+            todo = new TodoDto();
+            todo.setId(id);
+            todo.setTitle(request.getParameter("title"));
+            todo.setName(request.getParameter("name"));
+            todo.setSequence(Integer.parseInt( request.getParameter("sequence") ));
+            todo.setType("todo");
+            todo.setRegDate(LocalDateTime.now());
+        }
+
+        return todo;
+    }
 }

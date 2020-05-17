@@ -1,5 +1,17 @@
+const modal = document.querySelector('#input-modal');
+
 function xhr_func (method, url, data=null, callback) {
-    var xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
+    // let formData = null;
+    let formData = [];
+    if( data ){
+        // formData = new FormData();
+        for( let k in data ){
+            // formData.append(k, data[k]);
+            formData.push(`${k}=${data[k]}`);
+        }
+    }
+
     xhr.onreadystatechange = function() {
         if (xhr.readyState === xhr.DONE) {
             if (xhr.status === 200 || xhr.status === 201) {
@@ -10,8 +22,10 @@ function xhr_func (method, url, data=null, callback) {
             }
         }
     };
+
     xhr.open(method, url);
-    xhr.send(data);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send(formData.join("&"));
 }
 
 function render_empty_li (data) {
@@ -24,6 +38,12 @@ function render_empty_li (data) {
 AJAX = function(){
     this.get = function (url, callback){
         xhr_func('GET', url, null, callback);
+    }
+    this.post = function (url, data, callback) {
+        xhr_func('POST', url, data, callback);
+    }
+    this.put = function (url, data, callback) {
+        xhr_func('PUT', url, data, callback);
     }
 }
 
@@ -38,6 +58,11 @@ Item = function(data){
         </div>
     `;
     this.render = function(){
+
+        if ( document.querySelector(`.${this.data.type} ul .nodata`) ) {
+            document.querySelector(`.${this.data.type} ul`).removeChild(document.querySelector(`.${this.data.type} ul .nodata`));
+        }
+
         this.tpl = this.tpl.replace('{%title%}', this.data.title);
 
         let created_at = this.data.regDate.year + "/" + this.data.regDate.monthValue + "/" + this.data.regDate.dayOfMonth;
@@ -51,10 +76,21 @@ Item = function(data){
 
         li.setAttribute("class", "todo-item");
         li.setAttribute("data-id", this.data.id);
+        li.setAttribute("data-grp", this.data.type);
 
         if( this.data.type != 'done'){
             let nextBtn = document.createElement("button");
             nextBtn.textContent = "\>";
+            nextBtn.addEventListener('click',function(e){
+                e.preventDefault();
+                console.log(this.closest("li"));
+                //TODO:: next do point : todo is done, and move to doing type.
+                // todo :: check - if data-grp == todo then
+                // todo:: ajax.put(url, {id, doing})
+                // todo :: get result is success then
+                // todo :: let target = this li, move to doing
+                    // todo :: find easily move element, else remove li, and append document.query...('.doing ul').append(this li);
+            });
             li.children[1].append(nextBtn);
         }
 
@@ -63,6 +99,7 @@ Item = function(data){
     }
     this.noData = function(className = 'todo'){
         let li = document.createElement("li");
+        li.setAttribute("class", "nodata");
         li.innerHTML = "there's no data yet";
         let ul = document.querySelector(`.${className} ul`);
         ul.append(li);
@@ -86,13 +123,34 @@ function getAllTodos (data) {
     }
 }
 
+function getNewTodo (data) {
+    console.log(data);
+    new Item(data).render();
+    modal.style.display = "none";
+    document.querySelector('#input-modal form #title').value = "";
+    document.querySelector('#input-modal form #name').value = "";
+    document.querySelector('#input-modal form .sequence [type="radio"]:checked').checked = false;
+}
+
+
+
 document.querySelector('header button').addEventListener('click', function(e){
-    document.querySelector("#input-modal").style.display = "unset";
+    modal.style.display = "unset";
+    document.querySelector('#input-modal form #title').focus();
 });
 document.querySelector('#input-modal .btns #cancel').addEventListener('click', function(e){
     e.preventDefault();
     document.querySelector("#input-modal").style.display = "none";
 });
 
+document.querySelector('#input-modal form').addEventListener('submit', function(e){
+   e.preventDefault();
 
+   let data = {};
+   data.title = document.querySelector('#input-modal form #title').value;
+   data.name = document.querySelector('#input-modal form #name').value;
+   data.sequence = document.querySelector('#input-modal form .sequence [type="radio"]:checked').value;
+
+    ajax.post("/api/v1/todos", data, getNewTodo);
+});
 

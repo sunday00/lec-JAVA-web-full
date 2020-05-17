@@ -40,20 +40,20 @@
             <form action="/api/v1/todos" method="POST">
                 <div class="title">
                     <label for="title" class="modal-title">Title</label>
-                    <input type="text" id="title" name="title" />
+                    <input type="text" id="title" name="title" required />
                 </div>
                 <div class="name">
                     <label for="name" class="modal-title">Name</label>
-                    <input type="text" id="name" name="name" />
+                    <input type="text" id="name" name="name" required />
                 </div>
                 <div class="sequence">
                     <p class="modal-title">Ssequence</p>
                     <label for="sequence1">sequence1</label>
-                    <input type="radio" id="sequence1" name="sequence" value="sequence1" />
+                    <input type="radio" id="sequence1" name="sequence" value="1" required />
                     <label for="sequence2">sequence2</label>
-                    <input type="radio" id="sequence2" name="sequence" value="sequence2" />
+                    <input type="radio" id="sequence2" name="sequence" value="2" required />
                     <label for="sequence3">sequence3</label>
-                    <input type="radio" id="sequence3" name="sequence" value="sequence3" />
+                    <input type="radio" id="sequence3" name="sequence" value="3" required />
                 </div>
                 <div class="btns">
                     <div class="text-left">
