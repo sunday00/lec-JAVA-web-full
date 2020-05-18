@@ -45,6 +45,9 @@ AJAX = function(){
     this.put = function (url, data, callback) {
         xhr_func('PUT', url, data, callback);
     }
+    this.delete = function (url, data, callback) {
+        xhr_func('DELETE', url, data, callback);
+    }
 }
 
 Item = function(data){
@@ -78,24 +81,20 @@ Item = function(data){
         li.setAttribute("data-id", this.data.id);
         li.setAttribute("data-grp", this.data.type);
 
-        if( this.data.type != 'done'){
-            let nextBtn = document.createElement("button");
-            nextBtn.textContent = "\>";
-            nextBtn.addEventListener('click',function(e){
-                e.preventDefault();
-                let li = this.closest("li");
-                let data = { type: li.getAttribute('data-grp') };
-                ajax.put(`/api/v1/todos/${li.getAttribute('data-id')}`, data, updateTodoType);
 
-                //TODO:: next do point : todo is done, and move to doing type.
-                // todo :: check - if data-grp == todo then
-                // todo:: ajax.put(url, {id, doing})
-                // todo :: get result is success then
-                // todo :: let target = this li, move to doing
-                    // todo :: find easily move element, else remove li, and append document.query...('.doing ul').append(this li);
-            });
-            li.children[1].append(nextBtn);
-        }
+        let nextBtn = document.createElement("button");
+
+        if( this.data.type !== 'done') nextBtn.textContent = "\>";
+        else nextBtn.textContent = "del";
+
+        nextBtn.addEventListener('click',function(e){
+            e.preventDefault();
+            let li = this.closest("li");
+            let data = { type: li.getAttribute('data-grp') };
+            if(li.getAttribute('data-grp') !== 'done') ajax.put(`/api/v1/todos/${li.getAttribute('data-id')}`, data, updateTodoType);
+            else ajax.delete(`/api/v1/todos/${li.getAttribute('data-id')}`, data, deleteTodo);
+        });
+        li.children[1].append(nextBtn);
 
         let ul = document.querySelector(`.${this.data.type} ul`);
         ul.append(li);
@@ -136,9 +135,32 @@ function getNewTodo (data) {
 }
 
 function updateTodoType (data) {
-    document.querySelector(`section.${data.type} ul`).append(
-        document.querySelector(`li[data-id="${data.id}"]`)
-    )
+    let targetLi = document.querySelector(`li[data-id="${data.id}"]`);
+    let oldUl = document.querySelector(`li[data-id="${data.id}"]`).closest('ul');
+    let oldUlCount = oldUl.querySelectorAll('li').length;
+    let newUl = document.querySelector(`section.${data.type} ul`);
+
+    if ( newUl.querySelector('.nodata') ){
+        newUl.removeChild(newUl.querySelector('.nodata'));
+    }
+
+    newUl.append( targetLi );
+    targetLi.removeAttribute('data-grp');
+    targetLi.setAttribute('data-grp', `${data.type}`);
+    if ( data.type == 'done' ) targetLi.querySelector('button').textContent = 'del';
+
+    if ( !(oldUlCount - 1) ){
+        new Item().noData(oldUl.closest('section').getAttribute('class'));
+    }
+}
+
+function deleteTodo (data) {
+    if (data) {
+        let li = document.querySelector(`li[data-id='${data}']`);
+        let ul = document.querySelector(`li[data-id='${data}']`).closest('ul');
+        ul.removeChild(li);
+        if ( !ul.querySelectorAll('li').length ) new Item().noData('done');
+    }
 }
 
 document.querySelector('header button').addEventListener('click', function(e){

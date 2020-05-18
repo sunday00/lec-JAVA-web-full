@@ -147,6 +147,26 @@ public class TodosDao {
         return result;
     }
 
+    public int deleteTodo(HttpServletRequest request) throws ClassNotFoundException, SQLException {
+        int result = 0;
+
+        String[] splitedUri = request.getRequestURI().split("/");
+        int id = Integer.parseInt( splitedUri[splitedUri.length - 1] );
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        String sql = "DELETE FROM todo WHERE id=?";
+
+        conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, id);
+
+        if ( ps.executeUpdate() > 0 ) {
+            result = id;
+        }
+
+        return result;
+    }
+
     private static String inputStreamToString(InputStream inputStream) {
         Scanner scanner = new Scanner(inputStream, "UTF-8");
         return scanner.hasNext() ? scanner.useDelimiter("\\A").next() : "";

@@ -40,10 +40,26 @@ public class UpdateServlet extends HttpServlet {
         PrintWriter pw = response.getWriter();
         pw.println(json);
         pw.close();
-
-
-
     }
 
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        TodosDao dao = new TodosDao();
+        int result = 0;
 
+        try {
+            result = dao.deleteTodo(request);
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(result);
+
+        PrintWriter pw = response.getWriter();
+        pw.println(json);
+        pw.close();
+    }
 }
