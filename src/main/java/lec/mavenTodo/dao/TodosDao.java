@@ -3,10 +3,13 @@ package lec.mavenTodo.dao;
 import lec.mavenTodo.dto.TodoDto;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class TodosDao {
     private static final String dbUrl = "jdbc:mysql://127.0.0.1:3306/practice?characterEncoding=UTF-8&serverTimezone=Asia/Seoul";
@@ -54,6 +57,35 @@ public class TodosDao {
         return result;
     }
 
+    public TodoDto getOneTodo(int id) throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+
+        String sql = "SELECT * FROM todo WHERE id = ?";
+
+        conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, id);
+
+        TodoDto todo = new TodoDto();
+        rs = ps.executeQuery();
+        while( rs.next() ){
+            todo.setId(rs.getInt("id"));
+            todo.setName(rs.getString("name"));
+            todo.setRegDate(rs.getTimestamp("regDate").toLocalDateTime());
+            todo.setSequence(rs.getInt("sequence"));
+            todo.setTitle(rs.getString("title"));
+            todo.setType(rs.getString("type"));
+        }
+
+        if( rs != null ){
+            rs.close();
+            ps.close();
+            conn.close();
+        }
+
+        return todo;
+    }
+
     public TodoDto insertTodo(HttpServletRequest request) throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
 
@@ -85,5 +117,38 @@ public class TodosDao {
         }
 
         return todo;
+    }
+
+    public int updateType(HttpServletRequest request) throws IOException, ClassNotFoundException, SQLException {
+        String[] splitedUri = request.getRequestURI().split("/");
+        int id = Integer.parseInt( splitedUri[splitedUri.length - 1] );
+
+        String data = inputStreamToString(request.getInputStream());
+        String[] splitedData = data.split("=");
+        String type = splitedData[ splitedData.length - 1 ];
+        System.out.println(type);
+        type = type.equals("todo") ? "doing" : "done";
+        System.out.println(type);
+
+        int result = 0;
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+
+        String sql = "UPDATE todo SET type=? WHERE id= ? ";
+
+        conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
+        ps = conn.prepareStatement(sql);
+        ps.setString(1, type);
+        ps.setInt(2, id);
+        if( ps.executeUpdate() > 0){
+            result = id;
+        }
+
+        return result;
+    }
+
+    private static String inputStreamToString(InputStream inputStream) {
+        Scanner scanner = new Scanner(inputStream, "UTF-8");
+        return scanner.hasNext() ? scanner.useDelimiter("\\A").next() : "";
     }
 }

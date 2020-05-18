@@ -83,13 +83,9 @@ Item = function(data){
             nextBtn.textContent = "\>";
             nextBtn.addEventListener('click',function(e){
                 e.preventDefault();
-                console.log(this.closest("li"));
-                //TODO:: next do point : todo is done, and move to doing type.
-                // todo :: check - if data-grp == todo then
-                // todo:: ajax.put(url, {id, doing})
-                // todo :: get result is success then
-                // todo :: let target = this li, move to doing
-                    // todo :: find easily move element, else remove li, and append document.query...('.doing ul').append(this li);
+                let li = this.closest("li");
+                let data = { type: li.getAttribute('data-grp') };
+                ajax.put(`/api/v1/todos/${li.getAttribute('data-id')}`, data, updateTodoType);
             });
             li.children[1].append(nextBtn);
         }
@@ -132,7 +128,17 @@ function getNewTodo (data) {
     document.querySelector('#input-modal form .sequence [type="radio"]:checked').checked = false;
 }
 
+function updateTodoType (data) {
+    document.querySelector(`section.${data.type} ul`).append(
+        document.querySelector(`li[data-id="${data.id}"]`)
+    );
 
+    /*TODO::
+        if now null, render null li
+        if now not null, remove null li
+        data-grp change
+     */
+}
 
 document.querySelector('header button').addEventListener('click', function(e){
     modal.style.display = "unset";
@@ -154,3 +160,6 @@ document.querySelector('#input-modal form').addEventListener('submit', function(
     ajax.post("/api/v1/todos", data, getNewTodo);
 });
 
+/*
+*    todo::  make done, erase button
+* */
