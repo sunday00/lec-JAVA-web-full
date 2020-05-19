@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>JS Bin</title>
+</head>
+<body>
+<h1>selector test</h1>
+
+
+<section>
+    <h2> red section </h2>
+    <ul>
+        <li class="red">apple</li>
+        <li class="red">orange</li>
+        <li>banana</li>
+        <li>grape</li>
+        <li>strawberry</li>
+    </ul>
+</section>
+
+<Br>
+
+<section>
+    <h2> blue section </h2>
+    <ul>
+        <li class="green blue">apple</li>
+        <li class="red">orange</li>
+        <li>banana</li>
+        <li>grape</li>
+        <li>strawberry</li>
+    </ul>
+</section>
+
+<script>
+    let sections = document.querySelectorAll("section");
+
+    sections.forEach( (el) => {
+        el.querySelectorAll("li").forEach((li)=>{
+            if( li.className.indexOf("blue") >= 0 ){
+                // li.closest("section").querySelector("h2").remove()
+                li.closest("section").removeChild(li.closest("section").querySelector("h2"));
+            }
+        })
+    } );
+
+    // Array.from(el.querySelectorAll("li"))
+        // originally, querySelectorAll is not Array. NodeList. So, it shouldn't work properly foreach, map function.
+        // Array.from can make array from NodeList.
+        // It's add es new method, so copy and paste first polyfill on MDN.
+
+</script>
+
+</body>
+</html>
