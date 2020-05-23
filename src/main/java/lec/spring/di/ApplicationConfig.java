@@ -8,7 +8,7 @@ public class ApplicationConfig {
     @Bean
     public Car car (Engine engine) {
         Car car = new Car ();
-        car.setEngine(engine);
+//        car.setEngine(engine);
         return car;
     }
 
