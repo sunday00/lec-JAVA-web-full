@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static lec.spring.jdbc.dao.RoleSql.*;
 
@@ -31,6 +32,11 @@ public class RoleDao {
         return jdbc.query(SELECT_ALL, Collections.EMPTY_MAP, rowMapper);
     }
 
+    public Role selectOne (int id) {
+        Map<String, ?> param = Collections.singletonMap("id", id);
+        return jdbc.queryForObject(SELECT_ONE, param, rowMapper);
+    }
+
     public int insertOne (Role role) {
         SqlParameterSource params = new BeanPropertySqlParameterSource(role);
         return jdbcInsert.execute(params);
@@ -39,5 +45,10 @@ public class RoleDao {
     public int updateOne (Role role) {
         SqlParameterSource params = new BeanPropertySqlParameterSource(role);
         return jdbc.update(UPDATE_ONE, params);
+    }
+
+    public int deleteOne (int id) {
+        Map<String, ?> param = Collections.singletonMap("id", id);
+        return jdbc.update(DELETE_ONE, param);
     }
 }
