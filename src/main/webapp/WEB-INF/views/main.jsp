@@ -13,6 +13,6 @@
 </head>
 <body>
     <h1>This is main</h1>
-<% response.sendRedirect("/guest/list"); %>
+<% response.sendRedirect("/list"); %>
 </body>
 </html>
