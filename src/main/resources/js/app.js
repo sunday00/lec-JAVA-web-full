@@ -1,34 +1,55 @@
-let promotionHtml;
-
-function xhr_func (method, url, data=null, callback = null) {
-    let xhr = new XMLHttpRequest();
+Object.prototype.convertRequestBodyFormData = function () {
     let formData = [];
-    if( data ){
-        for( let k in data ){
-            formData.push(`${k}=${data[k]}`);
-        }
+    for( let k in this ){
+        if ( typeof this[k] === "function") continue;
+        formData.push(`${k}=${this[k]}`);
+    }
+    return formData.join("&");
+}
+
+AJAX = function(){
+    this.ready = false;
+    this.results = {};
+    this.xhr = new XMLHttpRequest();
+
+    this.xhr_func = function (method, url, data=null, callback = null) {
+        this.xhr.onreadystatechange = () => {
+            if (this.xhr.readyState === this.xhr.DONE) {
+                if (this.xhr.status === 200 || this.xhr.status === 201) {
+                    this.results = JSON.parse( this.xhr.responseText );
+                    this.ready = true;
+                } else {
+                    console.error(this.xhr.responseText);
+                }
+            }
+        };
+
+        this.xhr.open(method, url);
+        this.xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        this.xhr.send( data ? data.convertRequestBodyFormData() : null );
     }
 
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === xhr.DONE) {
-            if (xhr.status === 200 || xhr.status === 201) {
-                let results = JSON.parse( xhr.responseText );
-                // if callback exists run callback,
-                // else return some object including 'then' method that has result and callback as args.
-                callback(results);
-            } else {
-                console.error(xhr.responseText);
-            }
+    this.get = function (url, callback = null){
+        this.xhr_func('GET', url, null);
+        return this;
+    }
+
+    this.then = function (callback) {
+        if ( this.ready ){
+            callback(this.results);
+        } else {
+            setTimeout(()=>{
+                this.then(callback);
+            }, 50);
         }
-    };
-
-    xhr.open(method, url);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.send(formData.join("&"));
+    }
 }
 
-function convertTemplateToHtml (tpl, parentHtml, option = {})
-{
+const ajax = new AJAX();
 
-}
+window.addEventListener('load', () => {
+    ajax.get("/api/promotions/all").then(( results )=>{
+        console.log(results);
+    });
+});
 
