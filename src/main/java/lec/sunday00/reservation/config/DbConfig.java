@@ -19,13 +19,18 @@ public class DbConfig implements TransactionManagementConfigurer {
     private String password = "Zktm500CC!";
 
     @Bean
-    public PlatformTransactionManager transactionManager () {
+    public DataSource dataSource () {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName(driver);
         dataSource.setUrl(url);
         dataSource.setUsername(user);
         dataSource.setPassword(password);
-        return new DataSourceTransactionManager(dataSource);
+        return dataSource;
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager () {
+        return new DataSourceTransactionManager(dataSource());
     }
 
     @Override

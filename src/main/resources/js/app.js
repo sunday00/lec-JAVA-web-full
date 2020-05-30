@@ -48,7 +48,7 @@ AJAX = function(){
 const ajax = new AJAX();
 
 window.addEventListener('load', () => {
-    ajax.get("/api/promotions/all").then(( results )=>{
+    ajax.get("/api/promotion/all").then(( results )=>{
         console.log(results);
     });
 });
