@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
     <title>네이버 예약</title>
     <link href="/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
 </head>
 
 <body>
@@ -31,7 +32,7 @@
 
         </header>
     </div>
-    <hr>
+    <hr />
     <div class="event">
         <div class="section_visual">
             <div class="group_visual">
@@ -162,15 +163,13 @@
 
 <%--TODO:: li.item.style.backgroundImage =  "url('/img/img/*_th_*.png');"--%>
 <script type="rv-template" id="promotionItem">
-    <li class="item">
-        <a href="{{event_url}}"> <span class="img_btm_border"></span> <span class="img_right_border"></span> <span class="img_bg_gra"></span>
-            <div class="event_txt">
-                <h4 class="event_txt_tit">{{event_title}}</h4>
-                <p class="event_txt_adr">{{event_adr}}</p>
-                <p class="event_txt_dsc">{{event_dsc}}</p>
-            </div>
-        </a>
-    </li>
+    <a href="{{event_url}}"> <span class="img_btm_border"></span> <span class="img_right_border"></span> <span class="img_bg_gra"></span>
+        <div class="event_txt">
+            <h4 class="event_txt_tit">{{event_title}}</h4>
+            <p class="event_txt_adr">{{event_adr}}</p>
+            <p class="event_txt_dsc">{{event_dsc}}</p>
+        </div>
+    </a>
 </script>
 
 <script type="rv-template" id="itemList">
