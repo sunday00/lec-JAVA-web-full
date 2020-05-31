@@ -1,7 +1,7 @@
 package lec.sunday00.reservation.controller;
 
 import lec.sunday00.reservation.model.Promotion;
-import lec.sunday00.reservation.repository.PromotionRepository;
+import lec.sunday00.reservation.service.PromotionServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,12 +16,12 @@ import java.util.List;
 public class ApiPromotionController {
 
     @Autowired
-    PromotionRepository promotionRepository;
+    PromotionServiceInterface promotionServiceInterface;
 
     @GetMapping("/{category}")
     public List<Promotion> index (@PathVariable(name = "category") String category, HttpServletRequest request) {
         if( category.equals("all") ){
-            return promotionRepository.selectAll();
+            return promotionServiceInterface.selectAll();
         }
 
         return null;

@@ -1,5 +1,8 @@
 package lec.sunday00.reservation.model;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Promotion {
     private Long id;
     private String title;

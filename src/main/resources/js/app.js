@@ -14,6 +14,10 @@ function replacePromotionTemplateToHtmlElement(template, item){
         .replace("{{event_dsc}}", item.description);
 }
 
+function replaceCategoryTemplateToHtmlElement(template, item){
+    return template.replace("{{category_name}}", item.name);
+}
+
 function animatePromotionElements (option) {
 
     let movingAnimateCssDom = document.createElement('style');
@@ -79,9 +83,10 @@ AJAX = function(){
     }
 }
 
-const ajax = new AJAX();
+let ajax;
 
 window.addEventListener('load', () => {
+    ajax = new AJAX();
     ajax.get("/api/promotion/all").then(( results )=>{
         let target = document.querySelector(".event ul.visual_img");
         let template = document.querySelector("script#promotionItem").innerHTML;
@@ -98,6 +103,19 @@ window.addEventListener('load', () => {
             item: '.event .visual_img li.item',
             stopTime: 1000,
             movingSpeed: 50
+        });
+    });
+
+    ajax = new AJAX();
+    ajax.get('/api/category/list').then((results) => {
+        let target = document.querySelector(".event .section_event_tab ul.event_tab_lst");
+        let template = document.querySelector("script#categoryItem").innerHTML;
+        results.forEach((item, idx) => {
+            let el = document.createElement('li');
+            el.className = "item";
+            el.setAttribute("data-category", item.id);
+            el.innerHTML = replaceCategoryTemplateToHtmlElement(template, item);
+            target.append( el );
         });
     });
 });
