@@ -3,7 +3,7 @@ package lec.sunday00.reservation.model;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Promotion {
+public class Product {
     private Long id;
     private String title;
     private String address;
@@ -12,7 +12,7 @@ public class Promotion {
 
     @Override
     public String toString() {
-        return "Promotion{" +
+        return "Product{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", address='" + address + '\'' +
