@@ -166,6 +166,30 @@ window.addEventListener('load', () => {
             el.className = "item";
             el.setAttribute("data-category", item.id);
             el.innerHTML = replaceCategoryTemplateToHtmlElement(template, item);
+
+            el.addEventListener("click", (e)=>{
+
+                document.querySelector(".event .section_event_tab ul.event_tab_lst a.active").className = "anchor";
+                (e.currentTarget).querySelector(".anchor").className = "anchor active";
+
+                document.querySelectorAll(".event .wrap_event_box .lst_event_box").forEach((ul) => {
+                    ul.innerHTML = "";
+                });
+
+                cnf.nextPage = 1;
+                cnf.category = item.id;
+                cnf.current_category_total = 0;
+                cnf.rendered_cnt = 0;
+                document.querySelector(".event .wrap_event_box .more").style.display = "";
+
+                ajax.get(`/api/product/count/${item.id}`).then((results) => {
+                    renderProductCount(results);
+                });
+                ajax.get(`/api/product/${item.id}/1`).then((results)=>{
+                    renderProduct(results);
+                });
+            });
+
             target.append( el );
         });
     });
@@ -179,5 +203,4 @@ window.addEventListener('load', () => {
         renderMoreBtn ();
     });
 });
-
 

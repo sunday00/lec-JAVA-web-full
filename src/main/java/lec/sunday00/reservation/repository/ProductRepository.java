@@ -20,8 +20,9 @@ public class ProductRepository extends BaseRepository {
     public int selectCount(String category){
         if ( category.equals("all") ){
             return this.jdbc.queryForObject(COUNT, Collections.emptyMap(), Integer.class);
+        } else {
+            return this.jdbc.queryForObject(COUNT + " WHERE category_id="+category, Collections.emptyMap(), Integer.class);
         }
-        return 0;
     }
 
     public List<Product> select(String category, int page){
@@ -32,7 +33,13 @@ public class ProductRepository extends BaseRepository {
             params.put("category", 0);
 
             return this.jdbc.query(SELECT_ALL.replace("{{=}}", "<>"), params, rowMapper);
+        } else {
+            Map<String, Integer> params = new HashMap<>();
+            params.put("start", 0 + (page - 1) * 4);
+            params.put("length", 4);
+            params.put("category", Integer.parseInt(category));
+
+            return this.jdbc.query(SELECT_ALL.replace("{{=}}", "="), params, rowMapper);
         }
-        return null;
     }
 }
