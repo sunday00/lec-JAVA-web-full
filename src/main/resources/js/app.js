@@ -29,6 +29,28 @@ function replaceCategoryTemplateToHtmlElement(template, item){
     return template.replace("{{category_name}}", item.name);
 }
 
+function refreshForCategory(e, itemId){
+    document.querySelector(".event .section_event_tab ul.event_tab_lst a.active").className = "anchor";
+    (e.currentTarget).querySelector(".anchor").className = "anchor active";
+
+    document.querySelectorAll(".event .wrap_event_box .lst_event_box").forEach((ul) => {
+        ul.innerHTML = "";
+    });
+
+    cnf.nextPage = 1;
+    cnf.category = itemId;
+    cnf.current_category_total = 0;
+    cnf.rendered_cnt = 0;
+    document.querySelector(".event .wrap_event_box .more").style.display = "";
+
+    ajax.get(`/api/product/count/${itemId}`).then((results) => {
+        renderProductCount(results);
+    });
+    ajax.get(`/api/product/${itemId}/1`).then((results)=>{
+        renderProduct(results);
+    });
+}
+
 function animatePromotionElements (option) {
 
     let movingAnimateCssDom = document.createElement('style');
@@ -168,31 +190,16 @@ window.addEventListener('load', () => {
             el.innerHTML = replaceCategoryTemplateToHtmlElement(template, item);
 
             el.addEventListener("click", (e)=>{
-
-                document.querySelector(".event .section_event_tab ul.event_tab_lst a.active").className = "anchor";
-                (e.currentTarget).querySelector(".anchor").className = "anchor active";
-
-                document.querySelectorAll(".event .wrap_event_box .lst_event_box").forEach((ul) => {
-                    ul.innerHTML = "";
-                });
-
-                cnf.nextPage = 1;
-                cnf.category = item.id;
-                cnf.current_category_total = 0;
-                cnf.rendered_cnt = 0;
-                document.querySelector(".event .wrap_event_box .more").style.display = "";
-
-                ajax.get(`/api/product/count/${item.id}`).then((results) => {
-                    renderProductCount(results);
-                });
-                ajax.get(`/api/product/${item.id}/1`).then((results)=>{
-                    renderProduct(results);
-                });
+                refreshForCategory(e, item.id);
             });
 
             target.append( el );
         });
     });
+
+    document.querySelector(".event .section_event_tab ul.event_tab_lst li[data-category='0']").addEventListener("click", (e)=>{
+        refreshForCategory(e, "all");
+    })
 
     ajax.get('/api/product/count/all').then((results) => {
         renderProductCount(results);
