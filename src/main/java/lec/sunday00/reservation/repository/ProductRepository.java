@@ -30,6 +30,7 @@ public class ProductRepository extends BaseRepository {
             params.put("start", 0 + (page - 1) * 4);
             params.put("length", 4);
             params.put("category", 0);
+
             return this.jdbc.query(SELECT_ALL.replace("{{=}}", "<>"), params, rowMapper);
         }
         return null;

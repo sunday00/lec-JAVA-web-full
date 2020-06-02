@@ -23,9 +23,10 @@ public class ApiProductController {
         return productServiceInterface.selectCount(category);
     }
 
-    @GetMapping("/{category}/{?page}")
+    @GetMapping("/{category}/{page}")
     public List<Product> select ( @PathVariable(name = "category") String category,
                                   @PathVariable(name = "page", required = false) Integer page ) {
+
         if( page == null ) page = 1;
         return productServiceInterface.select(category, page);
     }
