@@ -11,14 +11,14 @@ Object.prototype.convertRequestBodyFormData = function () {
 }
 
 function replacePromotionTemplateToHtmlElement(template, item){
-    return template.replace("{{event_url}}", `/product/show/${item.id}`)
+    return template.replace("{{event_url}}", `/display/show/${item.id}`)
         .replace("{{event_title}}", item.title)
         .replace("{{event_adr}}", item.address)
         .replace("{{event_dsc}}", item.description);
 }
 
 function replaceProductTemplateToHtmlElement(template, item){
-    return template.replace("{{event_url}}", `/product/show/${item.id}`)
+    return template.replace("{{event_url}}", `/display/show/${item.id}`)
         .replace("{{event_title}}", item.title)
         .replace("{{event_thumbnail}}", `/img/${item.thumbnail}`)
         .replace("{{event_adr}}", item.address)
@@ -43,10 +43,10 @@ function refreshForCategory(e, itemId){
     cnf.rendered_cnt = 0;
     document.querySelector(".event .wrap_event_box .more").style.display = "";
 
-    ajax.get(`/api/product/count/${itemId}`).then((results) => {
+    ajax.get(`/api/display/count/${itemId}`).then((results) => {
         renderProductCount(results);
     });
-    ajax.get(`/api/product/${itemId}/1`).then((results)=>{
+    ajax.get(`/api/display/${itemId}/1`).then((results)=>{
         renderProduct(results);
     });
 }
@@ -106,18 +106,24 @@ function renderProduct(results){
 function renderMoreBtn () {
     let target = document.querySelector(".event .wrap_event_box .more");
     target.firstElementChild.addEventListener("click", (e)=>{
-        ajax.get(`/api/product/${cnf.category}/${cnf.nextPage}`).then(renderProduct);
+        ajax.get(`/api/display/${cnf.category}/${cnf.nextPage}`).then(renderProduct);
     });
 }
 
-FrontConfig = function () {
+const FrontConfig = function () {
     this.nextPage = 1;
     this.category = 'all';
     this.current_category_total = 0;
     this.rendered_cnt = 0;
 }
 
-AJAX = function(){
+const route = {
+    main: "/",
+    detail: RegExp(/\/display\/show\/[0-9]{1,3}/),
+
+}
+
+const AJAX = function(){
     this.ready = false;
     this.results = {};
     this.xhr = new XMLHttpRequest();
@@ -156,10 +162,7 @@ AJAX = function(){
     }
 }
 
-window.addEventListener('load', () => {
-    ajax = new AJAX();
-    cnf = new FrontConfig();
-
+const mainInit = function () {
     ajax.get("/api/promotion/all").then(( results )=>{
         let target = document.querySelector(".event ul.visual_img");
         let template = document.querySelector("script#promotionItem").innerHTML;
@@ -178,7 +181,6 @@ window.addEventListener('load', () => {
             movingSpeed: 50
         });
     });
-
 
     ajax.get('/api/category/list').then((results) => {
         let target = document.querySelector(".event .section_event_tab ul.event_tab_lst");
@@ -201,13 +203,26 @@ window.addEventListener('load', () => {
         refreshForCategory(e, "all");
     })
 
-    ajax.get('/api/product/count/all').then((results) => {
+    ajax.get('/api/display/count/all').then((results) => {
         renderProductCount(results);
     });
 
-    ajax.get("/api/product/all/1").then((results)=>{
+    ajax.get("/api/display/all/1").then((results)=>{
         renderProduct(results);
         renderMoreBtn ();
     });
+}
+
+const detailInit = function () {
+    console.log();
+}
+
+window.addEventListener('load', () => {
+    ajax = new AJAX();
+    cnf = new FrontConfig();
+
+    if (location.pathname === "/") mainInit();
+    if (route.detail.test(location.pathname)) detailInit();
+
 });
 

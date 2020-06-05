@@ -5,18 +5,20 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class Product {
+public class Display {
     private Long id;
+    private Long product_id;
     private String title;
     private String address;
     private String description;
     private String thumbnail;
-    private List<String> images;
+    private List<ImageFile> images;
 
     @Override
     public String toString() {
-        return "Product{" +
+        return "Display{" +
                 "id=" + id +
+                ", product_id=" + product_id +
                 ", title='" + title + '\'' +
                 ", address='" + address + '\'' +
                 ", description='" + description + '\'' +
@@ -25,20 +27,20 @@ public class Product {
                 '}';
     }
 
-    public List<String> getImages() {
-        return images;
-    }
-
-    public void setImages(List<String> images) {
-        this.images = images;
-    }
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getProduct_id() {
+        return product_id;
+    }
+
+    public void setProduct_id(Long product_id) {
+        this.product_id = product_id;
     }
 
     public String getTitle() {
@@ -71,5 +73,13 @@ public class Product {
 
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public List<ImageFile> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ImageFile> images) {
+        this.images = images;
     }
 }
