@@ -8,6 +8,7 @@
     <meta charset="utf-8">
     <meta name="description" content="네이버 예약, 네이버 예약이 연동된 곳 어디서나 바로 예약하고, 네이버 예약 홈(나의예약)에서 모두 관리할 수 있습니다.">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <meta name="product-id" content="${displayInfo.product_id}">
     <title>네이버 예약</title>
     <link href="/css/style.css" rel="stylesheet">
     <style>
@@ -65,7 +66,7 @@
                             <ul class="visual_img detail_swipe">
                                 <c:forEach var="img" items="${displayInfo.images}" varStatus="idx">
                                     <c:if test="${img.type.equals('ma') or img.type.equals('et')}">
-                                        <li class="item" style="width: 414px;"> <img alt="${displayInfo.title}'s image" class="img_thumb" src="/img/${img.save_file_name}"> <span class="img_bg"></span>
+                                        <li class="item" style="width: 414px; height: 414px;"> <img alt="${displayInfo.title}'s image" class="img_thumb" src="/img/${img.save_file_name}"> <span class="img_bg"></span>
                                             <div class="visual_txt">
                                                 <div class="visual_txt_inn">
                                                     <h2 class="visual_txt_tit"><span>${displayInfo.title}</span></h2>
@@ -113,6 +114,8 @@
                 <a href="#" class="bk_more _open"> <span class="bk_more_txt">펼쳐보기</span> <i class="fn fn-down2"></i> </a>
                 <a href="#" class="bk_more _close" style="display: none;"> <span class="bk_more_txt">접기</span> <i class="fn fn-up2"></i> </a>
             </div>
+
+<%--            ??? --%>
             <div class="section_event">
                 <div class="event_info_box">
                     <div class="event_info_tit">
@@ -123,18 +126,22 @@
                     </div>
                 </div>
             </div>
-            <div class="section_btn"> <button type="button" class="bk_btn"> <i class="fn fn-nbooking-calender2"></i> <span>예매하기</span> </button> </div>
+<%--            ??? --%>
+
+            <div class="section_btn"> <a href="/reservation/${displayInfo.id}" class="bk_btn"> <i class="fn fn-nbooking-calender2"></i> <span>예매하기</span> </a> </div>
+
             <div class="section_review_list">
                 <div class="review_box">
                     <h3 class="title_h3">예매자 한줄평</h3>
                     <div class="short_review_area">
                         <div class="grade_area">
                             <!-- [D] 별점 graph_value는 퍼센트 환산하여 width 값을 넣어줌 -->
-                            <span class="graph_mask"> <em class="graph_value" style="width: 84%;"></em> </span>
-                            <strong class="text_value"> <span>4.2</span> <em class="total">5.0</em> </strong>
-                            <span class="join_count"><em class="green">52건</em> 등록</span>
+                            <span class="graph_mask"> <em class="graph_value" style="width: 0%;"></em> </span>
+                            <strong class="text_value"> <span>0</span> <em class="total">5.0</em> </strong>
+                            <span class="join_count"><em class="green">0건</em> 등록</span>
                         </div>
                         <ul class="list_short_review">
+
                             <li class="list_item">
                                 <div>
                                     <div class="review_area">
@@ -148,28 +155,7 @@
                                     </div>
                                 </div>
                             </li>
-                            <li class="list_item">
-                                <div>
-                                    <div class="review_area no_img">
-                                        <h4 class="resoc_name"></h4>
-                                        <p class="review">너무 재밌게봤구요~<br>마지막공연 후 뒷풀이도 잘봤습니다</p>
-                                    </div>
-                                    <div class="info_area">
-                                        <div class="review_info"> <span class="grade">5.0</span> <span class="name">yyck****</span> <span class="date">2017.3.5. 방문</span> </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list_item">
-                                <div>
-                                    <div class="review_area no_img">
-                                        <h4 class="resoc_name"></h4>
-                                        <p class="review">좋은 공연이었습니다. <br>머큐쇼역활 하신분의 열창이 기억에 남는 반면에,,, 로미오는 별로 기억에 남지 않네요..</p>
-                                    </div>
-                                    <div class="info_area">
-                                        <div class="review_info"> <span class="grade">4.0</span> <span class="name">xero****</span> <span class="date">2017.3.4. 방문</span> </div>
-                                    </div>
-                                </div>
-                            </li>
+
                         </ul>
                     </div>
                     <p class="guide"> <i class="spr_book2 ico_bell"></i> <span>네이버 예약을 통해 실제 방문한 이용자가 남긴 평가입니다.</span> </p>

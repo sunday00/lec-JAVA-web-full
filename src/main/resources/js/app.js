@@ -1,6 +1,3 @@
-let ajax;
-let cnf;
-
 Object.prototype.convertRequestBodyFormData = function () {
     let formData = [];
     for( let k in this ){
@@ -9,6 +6,11 @@ Object.prototype.convertRequestBodyFormData = function () {
     }
     return formData.join("&");
 }
+
+// mainPage
+
+let ajax;
+let cnf;
 
 function replacePromotionTemplateToHtmlElement(template, item){
     return template.replace("{{event_url}}", `/display/show/${item.id}`)
@@ -117,6 +119,50 @@ const FrontConfig = function () {
     this.rendered_cnt = 0;
 }
 
+
+// detailPage
+function animateDetailElements(option) {
+    let movingAnimateCssDom = document.createElement('style');
+    movingAnimateCssDom.innerHTML = `${option.parent} { transition: transform ${option.movingSpeed}ms; }`;
+    document.querySelector('head').appendChild(movingAnimateCssDom);
+
+    const visualParent = document.querySelector(option.parent);
+    let visualLis = visualParent.querySelectorAll("li");
+    visualLis.forEach((el) => {
+        let img = el.querySelector('img');
+        if ( img.offsetHeight < el.offsetHeight) {
+            img.style.position = 'relative';
+            img.style.width = 'auto';
+            img.style.height = `${el.offsetHeight}px`;
+            img.style.left = '50%';
+            img.style.transform = 'translateX(-50%)';
+        }
+    });
+    const elementPage = document.querySelector(".pagination .figure_pagination span.num");
+
+    let activeVisualNo = 0;
+    document.querySelector(".group_visual .prev").addEventListener('click', (e) => {
+        e.preventDefault();
+        activeVisualNo --;
+        if (activeVisualNo < 0) activeVisualNo = visualLis.length - 1;
+        visualParent.style.transform = `translateX(${-100 * (activeVisualNo % visualLis.length)}%)` ;
+        elementPage.textContent = `${activeVisualNo + 1}`;
+    });
+    document.querySelector(".group_visual .nxt").addEventListener('click', (e) => {
+        e.preventDefault();
+        activeVisualNo ++;
+        if (activeVisualNo > visualLis.length - 1) activeVisualNo = 0;
+        visualParent.style.transform = `translateX(${-100 * (activeVisualNo % visualLis.length)}%)` ;
+        elementPage.textContent = `${activeVisualNo + 1}`;
+    });
+}
+
+const DetailConfig = function () {
+    this.id = location.pathname.split("/").pop();
+    this.product_id = document.querySelector("head meta[name='product-id']").getAttribute('content');
+}
+
+// route for active js parts
 const route = {
     main: "/",
     detail: RegExp(/\/display\/show\/[0-9]{1,3}/),
@@ -163,6 +209,8 @@ const AJAX = function(){
 }
 
 const mainInit = function () {
+    cnf = new FrontConfig();
+
     ajax.get("/api/promotion/all").then(( results )=>{
         let target = document.querySelector(".event ul.visual_img");
         let template = document.querySelector("script#promotionItem").innerHTML;
@@ -214,13 +262,52 @@ const mainInit = function () {
 }
 
 const detailInit = function () {
-    console.log();
+
+    cnf = new DetailConfig();
+
+    animateDetailElements({
+        parent: ".group_visual .container_visual ul.visual_img",
+        movingSpeed: 500
+    });
+
+    document.querySelector(".bk_more").addEventListener('click', (e) => {
+       e.preventDefault();
+       const description = document.querySelector(".store_details");
+       const btnMore = document.querySelector(".bk_more");
+       if( description.classList.contains("close3") ){
+           description.classList.remove("close3");
+           btnMore.classList.remove('_open');
+           btnMore.classList.add('_close');
+           btnMore.querySelector(".bk_more_txt").textContent = "접기";
+           btnMore.querySelector(".fn").classList.remove("fn-down2");
+           btnMore.querySelector(".fn").classList.add("fn-up2");
+       } else {
+           description.classList.add("close3");
+           btnMore.classList.remove('_close');
+           btnMore.classList.add('_open');
+           btnMore.querySelector(".bk_more_txt").textContent = "펼쳐보기";
+           btnMore.querySelector(".fn").classList.remove("fn-up2");
+           btnMore.querySelector(".fn").classList.add("fn-down2");
+       }
+
+    });
+
+    const commentArea = document.querySelector(".section_review_list");
+    const cntElement = commentArea.querySelector(".grade_area .join_count .green");
+    const scoreTxt = commentArea.querySelector(".grade_area .text_value");
+    const scoreStar = commentArea.querySelector(".grade_area .graph_value");
+    ajax.get(`/api/comment/score/${cnf.product_id}`).then(( result ) => {
+        cntElement.textContent = `${result.cnt}건`;
+        scoreTxt.textContent = result.avg.toFixed(1);
+        scoreStar.style.width = `${(result.avg / 5) * 100}%`;
+    });
+
+    ajax.get(`/api/comment/brief/${cnf.product_id}`);
+
 }
 
 window.addEventListener('load', () => {
     ajax = new AJAX();
-    cnf = new FrontConfig();
-
     if (location.pathname === "/") mainInit();
     if (route.detail.test(location.pathname)) detailInit();
 

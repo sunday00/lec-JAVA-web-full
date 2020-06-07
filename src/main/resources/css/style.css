@@ -719,7 +719,8 @@ button {
     cursor: pointer;
     font-size: 17px;
     color: #fff;
-    box-sizing: border-box
+    box-sizing: border-box;
+    line-height: 47px;
 }
 
 .box_bk_btn {
