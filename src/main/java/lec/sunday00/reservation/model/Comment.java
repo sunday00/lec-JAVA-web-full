@@ -11,6 +11,8 @@ public class Comment {
     private Long reservation_info_id;
     private Long score;
     private String comment;
+    private String user_name;
+    private String image;
     private LocalDateTime create_date;
 
     @Override
@@ -21,8 +23,26 @@ public class Comment {
                 ", reservation_info_id=" + reservation_info_id +
                 ", score=" + score +
                 ", comment='" + comment + '\'' +
+                ", user_name='" + user_name + '\'' +
+                ", image='" + image + '\'' +
                 ", create_date=" + create_date +
                 '}';
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Long getId() {

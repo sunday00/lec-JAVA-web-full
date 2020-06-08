@@ -142,30 +142,16 @@
                         </div>
                         <ul class="list_short_review">
 
-                            <li class="list_item">
-                                <div>
-                                    <div class="review_area">
-                                        <div class="thumb_area">
-                                            <a href="#" class="thumb" title="이미지 크게 보기"> <img width="90" height="90" class="img_vertical_top" src="http://naverbooking.phinf.naver.net/20170306_3/1488772023601A4195_JPEG/image.jpg?type=f300_300" alt="리뷰이미지"> </a> <span class="img_count" style="display:none;">1</span>                                                </div>
-                                        <h4 class="resoc_name"></h4>
-                                        <p class="review">2층이어서 걱정했는데 꽤잘보여서 좋았습니다 고미오 너무 멋있었습니다 사진은 커튼콜때 찍었습니다 끝나고 퇴근길도 봐서 너무 좋았어요</p>
-                                    </div>
-                                    <div class="info_area">
-                                        <div class="review_info"> <span class="grade">4.0</span> <span class="name">dbfl****</span> <span class="date">2017.3.5. 방문</span> </div>
-                                    </div>
-                                </div>
-                            </li>
-
                         </ul>
                     </div>
                     <p class="guide"> <i class="spr_book2 ico_bell"></i> <span>네이버 예약을 통해 실제 방문한 이용자가 남긴 평가입니다.</span> </p>
                 </div>
-                <a class="btn_review_more" href="./review.html"> <span>예매자 한줄평 더보기</span> <i class="fn fn-forward1"></i> </a>
+                <a class="btn_review_more" href="./review/${displayInfo.id}"> <span>예매자 한줄평 더보기</span> <i class="fn fn-forward1"></i> </a>
             </div>
             <div class="section_info_tab">
                 <!-- [D] tab 선택 시 anchor에 active 추가 -->
                 <ul class="info_tab_lst">
-                    <li class="item active _detail">
+                    <li class="item _detail">
                         <a href="#" class="anchor active"> <span>상세정보</span> </a>
                     </li>
                     <li class="item _path">
@@ -181,6 +167,7 @@
                                 <li class="detail_info_lst">
                                     <strong class="in_tit">[소개]</strong>
                                     <p class="in_dsc">
+                                        ${displayInfo.description}
                                     </p>
                                 </li>
                                 <li class="detail_info_lst"> <strong class="in_tit">[공지사항]</strong>
@@ -201,7 +188,8 @@
                 <div class="detail_location hide">
                     <div class="box_store_info no_topline">
                         <a href="#" class="store_location" title="지도웹으로 연결">
-                            <img class="store_map img_thumb" alt="map" src="https://simg.pstatic.net/static.map/image?version=1.1&amp;crs=EPSG:4326&amp;baselayer=bl_vc_bg&amp;exception=xml&amp;scale=2&amp;caller=mw_smart_booking&amp;overlayers=ol_vc_an&amp;center=127.0011948,37.5717079&amp;markers=type,default2,127.0011948,37.5717079&amp;level=11&amp;w=340&amp;h=150">
+<%--                            <img class="store_map img_thumb" alt="map" src="https://simg.pstatic.net/static.map/image?version=1.1&amp;crs=EPSG:4326&amp;baselayer=bl_vc_bg&amp;exception=xml&amp;scale=2&amp;caller=mw_smart_booking&amp;overlayers=ol_vc_an&amp;center=127.0011948,37.5717079&amp;markers=type,default2,127.0011948,37.5717079&amp;level=11&amp;w=340&amp;h=150">--%>
+                            <img class="store_map img_thumb" alt="map" src="/img/${displayInfo.images.get(displayInfo.images.size() - 1).save_file_name}">
                             <span class="img_border"></span>
                             <span class="btn_map"><i class="spr_book2 ico_mapview"></i></span>
                         </a>
@@ -244,6 +232,26 @@
 </footer>
 <div id="photoviwer"></div>
 </body>
+
+<script type="rv-template" id="itemList">
+    <div>
+        <div class="review_area">
+            <div class="thumb_area">
+                {{? image}}
+                <a href="#" class="thumb" title="이미지 크게 보기">
+                    <img width="90" height="90" class="img_vertical_top" src="{{image}}" alt="리뷰이미지">
+                </a>
+                {{/}}
+                <span class="img_count" style="display:none;">1</span>
+            </div>
+            <h4 class="resoc_name"></h4>
+            <p class="review">{{comment}}</p>
+        </div>
+        <div class="info_area">
+            <div class="review_info"> <span class="grade">{{score}}</span> <span class="name">{{user_name}}</span> <span class="date">{{date}}</span> </div>
+        </div>
+    </div>
+</script>
 
 <script src="/js/app.js"></script>
 </html>

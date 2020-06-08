@@ -157,6 +157,21 @@ function animateDetailElements(option) {
     });
 }
 
+function replaceCommentTemplateToHtmlElement(template, item){
+    if( ! item.image ){
+        template = template.replace(/\{\{\?\simage\}\}(\W|\w)*\{\{\/\}\}/, ``);
+    } else {
+        template = template.replace(/\{\{\?\simage\}\}(\W|\w)/, ``)
+            .replace(/\{\{\/\}\}/, ``);
+    }
+
+    return template.replace("{{image}}", item.image ? `/img/${item.image}` : '')
+        .replace("{{comment}}", item.comment)
+        .replace("{{score}}", item.score)
+        .replace("{{user_name}}", item.user_name)
+        .replace("{{date}}", `${item.create_date.year}.${item.create_date.monthValue}.${item.create_date.dayOfMonth}`);
+}
+
 const DetailConfig = function () {
     this.id = location.pathname.split("/").pop();
     this.product_id = document.querySelector("head meta[name='product-id']").getAttribute('content');
@@ -302,8 +317,33 @@ const detailInit = function () {
         scoreStar.style.width = `${(result.avg / 5) * 100}%`;
     });
 
-    ajax.get(`/api/comment/brief/${cnf.product_id}`);
+    ajax.get(`/api/comment/brief/${cnf.product_id}`).then(( result ) => {
+        let target = document.querySelector(".section_review_list ul.list_short_review");
+        let template = document.querySelector("script#itemList").innerHTML;
+        result.forEach((item, idx) => {
+            let el = document.createElement('li');
+            el.className = "list_item";
+            el.innerHTML = replaceCommentTemplateToHtmlElement(template, item);
+            target.append( el );
+        });
+    });
 
+    document.querySelectorAll(".section_info_tab .info_tab_lst li").forEach((li) => {
+        li.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            document.querySelector(".section_info_tab .info_tab_lst a.active").classList.remove("active");
+            e.currentTarget.querySelector('a').classList.add('active');
+
+            if( e.currentTarget.classList.value.indexOf("_detail") > 0 ){
+                document.querySelector(".detail_area_wrap").classList.remove("hide");
+                document.querySelector(".detail_location").classList.add("hide");
+            } else {
+                document.querySelector(".detail_location").classList.remove("hide");
+                document.querySelector(".detail_area_wrap").classList.add("hide");
+            }
+        });
+    });
 }
 
 window.addEventListener('load', () => {
