@@ -21,6 +21,11 @@ public class CommentService implements CommentServiceInterface {
     }
 
     @Override
+    public List<Comment> selectAll(Long id, int page) {
+        return commentRepository.selectAll(id, page);
+    }
+
+    @Override
     public List<Comment> select3(Long id) {
         return commentRepository.select3(id);
     }

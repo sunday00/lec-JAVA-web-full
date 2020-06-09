@@ -23,6 +23,14 @@ public class CommentRepository extends BaseRepository{
         return this.jdbc.queryForMap(SELECT_COUNT, params );
     }
 
+    public List<Comment> selectAll (Long id, int page) {
+        Map<String, Integer> params = new HashMap<>();
+        params.put("product_id", id.intValue());
+        params.put("start", (page - 1) * 10);
+        params.put("limit", 10);
+        return this.jdbc.query(SELECT_ALL, params, this.rowMapper);
+    }
+
     public List<Comment> select3 (Long id) {
         Map<String, Integer> params = new HashMap<>();
         params.put("product_id", id.intValue());
