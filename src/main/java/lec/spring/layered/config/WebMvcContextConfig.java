@@ -1,10 +1,16 @@
 package lec.spring.layered.config;
 
+import middleware.GuestBookInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import resolver.HandlerMapArgumentResolver;
+import resolver.JustGetAppleStringArgumentResolver;
+
+import java.util.List;
 
 @Configuration
 @EnableWebMvc
@@ -37,5 +43,18 @@ public class WebMvcContextConfig extends WebMvcConfigurerAdapter {
         internalResourceViewResolver.setPrefix("/WEB-INF/views/");
         internalResourceViewResolver.setSuffix(".jsp");
         return internalResourceViewResolver;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        super.addInterceptors(registry);
+        registry.addInterceptor(new GuestBookInterceptor()).addPathPatterns("/auth/**");
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        super.addArgumentResolvers(argumentResolvers);
+        argumentResolvers.add(new HandlerMapArgumentResolver());
+        argumentResolvers.add(new JustGetAppleStringArgumentResolver());
     }
 }

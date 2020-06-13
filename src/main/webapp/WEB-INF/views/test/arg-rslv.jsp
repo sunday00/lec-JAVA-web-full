@@ -5,6 +5,8 @@
     <title>Title</title>
 </head>
 <body>
-    <%=request.getAttribute("count")%>
+    <c:forEach var="item" items="${mapArgs}" varStatus="idx">
+        <p>${item.toString()}</p>
+    </c:forEach>
 </body>
 </html>
