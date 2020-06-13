@@ -12,15 +12,35 @@
     <div class="jumbotron">
         <h1>Guest Book</h1>
         <p>Total count : ${ count }</p>
+        <c:choose>
+            <c:when test="${passed != null}">
+            <form action="/auth/admin/logout" method="POST">
+                <input type="submit" value="logout" class="btn btn-success" />
+            </form>
+            </c:when>
+            <c:when test="${passed == null}">
+                <a href="/auth/admin/login" class="btn btn-primary">login</a>
+            </c:when>
+        </c:choose>
     </div>
 
     <ul class="list-group list-group-flush">
         <c:forEach items="${list}" var="guestbook">
-        <li class="list-group-item"><div>
-            <p>${ guestbook.id } ${ guestbook.name }</p>
-            <div>${guestbook.content }</div>
-            <p>${guestbook.regdate }</p>
-        </div></li>
+        <li class="list-group-item">
+            <div>
+                <p>
+                    <span>${ guestbook.id } ${ guestbook.name }</span>
+                    <c:if test="${passed != null}">
+                    <form action="/del" method="post">
+                        <input type="hidden" name="id" value="${guestbook.id}" />
+                        <input class="btn btn-danger" type="submit" value="delete">
+                    </form>
+                    </c:if>
+                </p>
+                <div>${guestbook.content }</div>
+                <p>${guestbook.regdate }</p>
+            </div>
+        </li>
         </c:forEach>
     </ul>
 
