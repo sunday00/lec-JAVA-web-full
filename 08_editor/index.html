@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <section>
+        <div id="editorjs"></div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/image@2.4.2/dist/bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@latest"></script>
+    <script>
+        const editor = new EditorJS({ 
+            /** 
+             * Id of Element that should contain the Editor 
+             */ 
+            holder: 'editorjs', 
+            
+            /** 
+             * Available Tools list. 
+             * Pass Tool's class or Settings object for each Tool you want to use 
+             */ 
+            tools: { 
+              image: {
+                class: ImageTool,
+                config: {
+                  endpoints: {
+                    byFile: 'http://localhost:8008/uploadFile', // Your backend file uploader endpoint
+                    byUrl: 'http://localhost:8008/fetchUrl', // Your endpoint that provides uploading by Url
+                  }
+                }
+              },
+              list: {
+                class: List,
+                inlineToolbar: [
+                  'link', 'bold'
+                ]
+              },
+              embed: {
+                class: Embed,
+                config: {
+                  services: {
+                    youtube: true
+                  }
+                }
+              },
+            }, 
+
+            data: {
+              time: 1552744582955,
+              blocks: [
+                {"type":"image","data":{"file":{"url":"https://gravatar.com/avatar/c061e5fc9e309cba89f9888d7e739cfa?s=150","original_name":"\u1103\u1161\u110b\u116e\u11ab\u1105\u1169\u1103\u1173.png","type":"png"},"caption":"","withBorder":false,"stretched":false,"withBackground":false}}
+              ]
+            }
+          }
+        )
+    </script>
+</body>
+</html>
